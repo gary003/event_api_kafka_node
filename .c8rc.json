@@ -1,0 +1,9 @@
+{
+  "include": ["src/v1"],
+  "thresholds": {
+    "branches": 80,
+    "lines": 85,
+    "functions": 90,
+    "statements": 85
+  }
+}
