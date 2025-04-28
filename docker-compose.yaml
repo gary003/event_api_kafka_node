@@ -66,6 +66,21 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+
+  data_generator:
+    build:
+      context: ./data_generator
+      dockerfile: Dockerfile
+    environment:
+      - KAFKA_BROKERS=kafka:9092
+      - COINGECKO_API_KEY=${COINGECKO_API_KEY}  # Optional if generating fake data
+      - GENERATOR_INTERVAL_MIN=500  # Min delay between events (ms)
+      - GENERATOR_INTERVAL_MAX=2000 # Max delay between events (ms)
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: unless-stopped
+    
 volumes:
   zookeeper-data:
   zookeeper-log:

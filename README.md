@@ -1,27 +1,5 @@
 # event API nodejs - typescript
 
-## Skills
-
-- **Clean architecture** (onion architecture)
-- CI/CD pipeline with **github actions**
-  - test, build docker image, deploy docker image to **docker hub**
-- Testing using **sinon.js** and **mocha**
-  - Mocks
-  - Coverage
-  - Unit tests
-  - Integration tests with **testcontainers** and **supertest**
-- Streams
-  - Pipeline handling
-  - Transformation
-  - Async generators
-- Documentation with **Swagger**
-- **Docker**
-  - Docker-compose
-  - Dockerfile
-- Logging with **Winston**
-- Validation using **Zod**
-- **Typescript**
-
 ## Description
 
 This repository is a backend event api streaming crypto data from coin gecko.
@@ -55,20 +33,9 @@ Don't forgot to restart your computer or session for the changes to be available
 
 ## Start API
 
-- Launch the app & DB (mysql)
+- Launch the data generation api
 
-  `docker-compose up`
-
-- OpenAPI (swagger)
-  Copy this url in a browser (adapt the port if needed)
-
-  `localhost:8080`
-
-## Tests + Coverage
-
-- Launch global tests
-
-  `npm run test`
+  `docker-compose up data_generator`
 
 ## Developer
 
