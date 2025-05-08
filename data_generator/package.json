@@ -5,7 +5,7 @@
   "main": "src/v1/index.ts",
   "scripts": {
     "build": "npx tsc -p .",
-    "start:generator": "ls -ail && npm run build && node ./dist/src/v1/index.js"
+    "start:generator": "pwd && ls -ail ./dist/v1 && node ./dist/v1/index.js"
   },
   "author": "Gary Johnson",
   "license": "ISC",

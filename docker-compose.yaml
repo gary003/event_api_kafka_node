@@ -51,11 +51,6 @@ services:
     environment:
       - NODE_ENV=${NODE_ENV:-production}
       - PORT=3000
-      - MONGO_URI=mongodb://mongo:27017/event_api
-      - KAFKA_BROKERS=kafka:9092
-      - COINGECKO_API_KEY=${COINGECKO_API_KEY}
-      - KAFKAJS_NO_PARTITIONER_WARNING=1
-      - JWT_SECRET=${JWT_SECRET:-secret}
     ports:
       - '3000:3000'
     command: >
@@ -72,15 +67,14 @@ services:
       context: ./data_generator
       dockerfile: Dockerfile
     environment:
-      - KAFKA_BROKERS=kafka:9092
-      - COINGECKO_API_KEY=${COINGECKO_API_KEY}  # Optional if generating fake data
+      - NODE_ENV=${NODE_ENV:-production}
       - GENERATOR_INTERVAL_MIN=500  # Min delay between events (ms)
       - GENERATOR_INTERVAL_MAX=2000 # Max delay between events (ms)
-    depends_on:
-      kafka:
-        condition: service_healthy
+    # depends_on:
+    #   kafka:
+    #     condition: service_healthy
     restart: unless-stopped
-    
+
 volumes:
   zookeeper-data:
   zookeeper-log:

@@ -1,0 +1,8 @@
+{
+    "files": [],
+    "references": [
+        { "path": "./data_generator" },
+        { "path": "./api" },
+        { "path": "./messageQ" }
+    ]
+}
