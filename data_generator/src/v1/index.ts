@@ -1,6 +1,6 @@
 import { setTimeout } from 'timers/promises'
 
-const REQUEST_INTERVAL = 6000; // 20 seconds between requests (CoinCap allows 10-30 RPM)
+const REQUEST_INTERVAL = 6000
 
 let lastRequestTime = 0
 
@@ -8,19 +8,12 @@ const fetchWithRateLimit = async () => {
   const planetsArr = ["nova", "black hole", "star", "comet", "dwarf"]
   const planetsCount = Math.floor(Math.random() * 1000)
 
-  try {
+  const planetIndex = Math.floor(Math.random() * planetsArr.length)
+  const data  = `Found in picture - ${planetsCount} ${planetsArr[planetIndex]}(s)`
 
-    const planetIndex = Math.floor(Math.random() * planetsArr.length)
-    const data  = `Found in picture - ${planetsCount} ${planetsArr[planetIndex]}(s)`
-
-    return {
-      data,
-      timestamp: Date.now()
-    }
-
-  } catch (error) {
-    console.error('API Error:', error instanceof Error ? error.message : String(error))
-    return null
+  return {
+    data,
+    timestamp: Date.now()
   }
 }
 
@@ -37,18 +30,20 @@ const run = async () => {
       await setTimeout(waitTime)
     }
 
-    const response = await fetchWithRateLimit()
-    
-    lastRequestTime = Number(response?.timestamp)
+    const response = await fetchWithRateLimit().catch(err => null)
 
-    if (response) {
-      console.log(`Astronomy - ${response.data}`)
+    await setTimeout(REQUEST_INTERVAL)
+
+    // console.log({response})
+
+    if (!!response) {
+      console.log(`Astronomy - ${JSON.stringify(response)}`)
+
+      lastRequestTime = Number(response.timestamp)
 
       // Add your Kafka producer logic here:
       // await producer.send({...});
     }
-
-    await setTimeout(REQUEST_INTERVAL)
   }
 }
 
