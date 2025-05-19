@@ -1,5 +1,3 @@
-import { setTimeout } from 'timers/promises'
-
 const REQUEST_INTERVAL = 6000
 
 let lastRequestTime = 0
@@ -25,12 +23,12 @@ const run = async () => {
     // Enforce rate limiting
     if (timeSinceLastRequest < REQUEST_INTERVAL) {
       const waitTime = REQUEST_INTERVAL - timeSinceLastRequest
-      await setTimeout(waitTime)
+      await new Promise((resolve) => setTimeout(resolve, waitTime))
     }
 
     const response = await fetchWithRateLimit().catch((err) => null)
 
-    await setTimeout(REQUEST_INTERVAL)
+    await new Promise((resolve) => setTimeout(resolve, REQUEST_INTERVAL))
 
     // console.log({response})
 

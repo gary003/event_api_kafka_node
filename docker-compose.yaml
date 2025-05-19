@@ -9,6 +9,17 @@ services:
     networks:
       - kafka-net
 
+  data_generator:
+    build:
+      context: ./data_generator
+      dockerfile: Dockerfile
+    environment:
+      KAFKA_BROKERS: kafka:9092
+    depends_on:
+      - kafka
+    networks:
+      - kafka-net
+
   kafka:
     image: confluentinc/cp-kafka:7.9.0
     hostname: kafka
