@@ -1,8 +1,8 @@
-# event API nodejs - typescript
+# event API nodejs - typescript - Kafka
 
 ## Description
 
-This repository is a backend event api streaming crypto data from coin gecko.
+This repository is a backend event api streaming data.
 
 ## Prerequisites
 
@@ -40,7 +40,7 @@ Don't forgot to restart your computer or session for the changes to be available
 ## Developer
 
 - Gary Johnson
-  - mail: gary.johnson.freelance@gmail.com
+  - mail: gary.johnson.top@gmail.com
   - github: https://github.com/gary003
 
 ## License

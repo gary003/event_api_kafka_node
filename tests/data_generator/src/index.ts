@@ -1,3 +1,6 @@
+import { ProducerRecord } from 'kafkajs'
+import { producer } from '../../../src/messageQ/initMQ'
+
 const REQUEST_INTERVAL = 6000
 
 let lastRequestTime = 0
@@ -33,12 +36,16 @@ const run = async () => {
     // console.log({response})
 
     if (!!response) {
-      console.log(`Astronomy - ${JSON.stringify(response)}`)
+      const stream_data: ProducerRecord = {
+        topic: 'Astronomy',
+        messages: [{ value: JSON.stringify(response) }]
+      }
+
+      console.log({ repo: 'data_generator', stream_data: stream_data })
 
       lastRequestTime = Number(response.timestamp)
 
-      // Add your Kafka producer logic here:
-      // await producer.send({...});
+      producer.send(stream_data)
     }
   }
 }
