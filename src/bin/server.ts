@@ -1,7 +1,9 @@
 import http from 'http'
 import app from '../app'
-import { runConsumer } from '../messageQ/consumer'
+
 import { producer } from '../messageQ/initMQ'
+import { runConsumer } from '../messageQ/consumer'
+import { runProducer } from '../messageQ/producer'
 
 // Create HTTP server
 const server = http.createServer(app)
@@ -52,30 +54,50 @@ const startConsumerWithRetry = async (retries = 5, delay = 5000) => {
   }
 }
 
+// Add this new function
+const startProducerWithRetry = async (retries = 5, delay = 5000) => {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    console.info(`Connecting Kafka producer (attempt ${attempt}/${retries})`)
+    const kafkaReady = await checkKafkaConnectivity()
+
+    if (kafkaReady) {
+      try {
+        console.info('Starting Kafka producer...')
+        await runProducer() // Your producer initialization logic
+        console.info('Kafka producer started successfully')
+        return
+      } catch (err) {
+        console.error(`Failed to start Kafka producer: ${err}`)
+      }
+    }
+
+    if (attempt === retries) {
+      console.error('Max producer retries reached')
+      throw new Error('Kafka producer initialization failed')
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, delay))
+  }
+}
+
 // Start server and consumer
 const startServer = async () => {
   try {
-    await startConsumerWithRetry()
     server.listen(port)
+
+    await startConsumerWithRetry()
+
+    await startProducerWithRetry()
   } catch (err) {
     console.error('Unexpected error starting server:', err)
     process.exit(1)
   }
 }
 
-startServer()
-
-server.on('error', onError)
-server.on('listening', onListening)
-
-// Handle graceful shutdown
-process.on('SIGTERM', () => shutdown('SIGTERM'))
-process.on('SIGINT', () => shutdown('SIGINT'))
-
 /**
  * Event listener for HTTP server "error" event.
  */
-function onError(error: NodeJS.ErrnoException) {
+const onError = (error: NodeJS.ErrnoException) => {
   if (error.syscall !== 'listen') {
     throw error
   }
@@ -96,7 +118,7 @@ function onError(error: NodeJS.ErrnoException) {
 /**
  * Event listener for HTTP server "listening" event.
  */
-function onListening() {
+const onListening = () => {
   const addr = server.address()
   const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr?.port}`
   console.info(`Server listening on ${bind}`)
@@ -105,7 +127,7 @@ function onListening() {
 /**
  * Graceful shutdown handler
  */
-function shutdown(signal: string) {
+const shutdown = (signal: string) => {
   console.info(`Received ${signal}. Shutting down gracefully...`)
   server.close(() => {
     console.info('HTTP server closed.')
@@ -117,3 +139,12 @@ function shutdown(signal: string) {
     process.exit(1)
   }, 10000)
 }
+
+startServer()
+
+server.on('error', onError)
+server.on('listening', onListening)
+
+// Handle graceful shutdown
+process.on('SIGTERM', () => shutdown('SIGTERM'))
+process.on('SIGINT', () => shutdown('SIGINT'))

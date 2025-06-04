@@ -35,7 +35,7 @@ Don't forgot to restart your computer or session for the changes to be available
 
 - Launch the data generation api
 
-  `docker-compose up data_generator`
+  `docker-compose up`
 
 ## Developer
 

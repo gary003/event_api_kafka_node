@@ -3,14 +3,18 @@ FROM node:23-slim
 
 WORKDIR /app
 
-# Copy source files
-COPY . .
+COPY package*.json .
 
 # Install all dependencies including devDependencies
 RUN npm i
 
+# Copy source files
+COPY . .
+
 # Expose the application port
 EXPOSE 3000
 
+RUN npm run build
+
 # Start the application
-CMD ["node", "./dist/bin/server.js"]
+CMD ["node", "./dist/src/bin/server.js"]
