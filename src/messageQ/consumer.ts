@@ -14,7 +14,7 @@ export const runConsumer = async () => {
       //     source: eventData.source || 'kafka'
       //   })
 
-      console.info(`Processed event: astronomy ; message : ${String(message)} on topic`)
+      console.info(`Processed event: astronomy ; message : ${(message.value)} on topic`)
     }
   })
 

@@ -25,11 +25,11 @@ export const publishEvent = async (topic: string, message: string) => {
   }
 }
 
-const delay = 2000
+const delay = 10000
 
 export async function runProducer() {
   for await (const newMessage of fetchAndCreateFakeMessage()) {
-    console.debug(newMessage)
+    // console.debug(String(newMessage))
 
     await publishEvent('astronomy', newMessage)
 

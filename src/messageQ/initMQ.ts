@@ -3,7 +3,7 @@ import { Kafka, Partitioners } from 'kafkajs'
 // Initialize Kafka client
 const kafka = new Kafka({
   clientId: 'event-api',
-  brokers: [process.env.KAFKA_BROKERS || ''] // e.g., ['kafka:9092']
+  brokers: [process.env.KAFKA_BROKERS || 'kafka:9092']
 })
 
 // Create producer with legacy partitioner to avoid warning

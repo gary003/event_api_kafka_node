@@ -5,10 +5,11 @@
   "main": "src/bin/server.ts",
   "scripts": {
     "build": "npx tsc -p .",
-    "start": "npm run build && node ./dist/bin/server.js",
+    "start:dist": "npm run build && node ./dist/src/bin/server.js",
     "docker:build": "docker build -t event-api .",
     "docker:run": "docker run -p 3000:3000 --env-file .env event-api",
-    "docker:start": "docker-compose down -v && docker-compose up --build"
+    "stop": "docker-compose down -v",
+    "start": "npm run stop && docker-compose up --build && npm run start:dist"
   },
   "author": "Gary Johnson",
   "license": "ISC",
