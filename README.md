@@ -40,8 +40,9 @@ Don't forgot to restart your computer or session for the changes to be available
 ## Developer
 
 - Gary Johnson
-  - mail: gary.johnson.top@gmail.com
-  - github: https://github.com/gary003
+  - Mail: gary.johnson.top@gmail.com
+  - Github: https://github.com/gary003
+  - LinkedIn: https://www.linkedin.com/in/gary-johnson-0168b985/
 
 ## License
 
