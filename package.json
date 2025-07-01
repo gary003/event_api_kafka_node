@@ -9,7 +9,7 @@
     "docker:build": "docker build -t event-api .",
     "docker:run": "docker run -p 3000:3000 --env-file .env event-api",
     "stop": "docker-compose down -v",
-    "start": "npm run stop && docker-compose up --build && npm run start:dist"
+    "start": "npm run stop && docker-compose up --build"
   },
   "author": "Gary Johnson",
   "license": "ISC",

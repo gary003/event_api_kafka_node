@@ -30,7 +30,6 @@ const checkKafkaConnectivity = async () => {
 // Start Kafka consumer with retry and connectivity check
 const startConsumerWithRetry = async (retries = 5, delay = 5000) => {
   for (let attempt = 1; attempt <= retries; attempt++) {
-    console.info(`Checking Kafka connectivity (attempt ${attempt}/${retries})`)
     const kafkaReady = await checkKafkaConnectivity()
     if (kafkaReady) {
       try {
@@ -49,14 +48,19 @@ const startConsumerWithRetry = async (retries = 5, delay = 5000) => {
       console.error('Max retries reached. Exiting...')
       process.exit(1)
     }
+
     console.info(`Retrying in ${delay / 1000} seconds...`)
+    
     await new Promise((resolve) => setTimeout(resolve, delay))
   }
 }
 
 // Add this new function
 const startProducerWithRetry = async (retries = 5, delay = 5000) => {
-  for (let attempt = 1; attempt <= retries; attempt++) {
+  // Create an async iterator for the attempts
+  const attempts = Array(retries).fill(0).map((_, index) => index +1)
+
+  for await (const attempt of attempts) {
     console.info(`Connecting Kafka producer (attempt ${attempt}/${retries})`)
     const kafkaReady = await checkKafkaConnectivity()
 
@@ -134,13 +138,13 @@ const shutdown = (signal: string) => {
     process.exit(0)
   })
 
+  producer.disconnect()
+
   setTimeout(() => {
     console.error('Could not close connections in time, forcefully shutting down')
     process.exit(1)
   }, 10000)
 }
-
-startServer()
 
 server.on('error', onError)
 server.on('listening', onListening)
@@ -148,3 +152,5 @@ server.on('listening', onListening)
 // Handle graceful shutdown
 process.on('SIGTERM', () => shutdown('SIGTERM'))
 process.on('SIGINT', () => shutdown('SIGINT'))
+
+startServer()
