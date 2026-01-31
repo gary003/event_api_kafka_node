@@ -1,18 +1,22 @@
 DIR_NAME=$(basename "$PWD")
 CURRENT_DATE=$(date +%Y%m%d_%H%M%S)
 
-if [ ! -d logs ]; then
-    mkdir logs && echo "New "logs/" directory created"
-fi
+rm -f PROJECT_DUMP_* && echo "Previous dump file deleted"
 
-OUTPUT_FILE="logs/project_dump_${DIR_NAME}_${CURRENT_DATE}.txt"
+OUTPUT_FILE="PROJECT_DUMP_${DIR_NAME}_${CURRENT_DATE}.txt"
 
 echo "" > "$OUTPUT_FILE"
 
 find . -type f \
+! -path "./PROJECT_DUMP_*" \
 ! -path "*/node_modules/*" \
 ! -path "*/logs/*" \
 ! -path "*/coverage/*" \
+! -path "*/db_volume/*" \
+! -path "*/db_file_volume/*" \
+! -path "*/grafana_data_volume/*" \
+! -path "*/promtail/*" \
+! -path "*/trace_data_volume/*" \
 ! -path "*/.git/*" \
 ! -path "*/github/*" \
 ! -name "package-lock.json" | \
@@ -22,4 +26,4 @@ while read -r file; do
     echo "" >> "$OUTPUT_FILE"
 done
 
-echo "Project dump file (${OUTPUT_FILE}) created in logs/ directory"
+echo "Project dump file (${OUTPUT_FILE}) created in root directory"
